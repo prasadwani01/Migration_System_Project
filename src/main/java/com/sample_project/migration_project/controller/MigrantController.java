@@ -20,7 +20,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @RestController
@@ -108,6 +109,7 @@ public class MigrantController {
     ) {
         return ResponseEntity.ok(service.getAllMigrantsPaginated(page, size, sortBy));
     }
+
     @GetMapping("/export/report/pdf")
     public void exportToPdf(HttpServletResponse response) throws IOException {
         // Set the response type to PDF
@@ -123,6 +125,22 @@ public class MigrantController {
 
         // Call the service to generate and write the PDF
         service.exportToPdf(response);
+    }
+
+//    @GetMapping("/{id}")
+//    public ResponseEntity<Migrant> getMigrantById(@PathVariable Long id) {
+//        // 1. Ask the service to find the migrant
+//        Migrant migrant = service.getMigrantById(id);
+//
+//        // 2. If found, return it with a 200 OK status
+//        return ResponseEntity.ok(migrant);
+//    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Migrant> getMigrantById(@PathVariable Long id, Authentication authentication) {
+        String currentUsername = authentication.getName();
+        Migrant migrant = service.getMigrantByIdSecure(id, currentUsername, authentication.getAuthorities());
+        return ResponseEntity.ok(migrant);
     }
 
 }

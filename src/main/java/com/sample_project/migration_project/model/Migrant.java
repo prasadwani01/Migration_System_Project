@@ -40,6 +40,8 @@ public class Migrant {
     @PastOrPresent(message = "Migration date cannot be in the future") // Rule 4
     private LocalDate migrationDate;
 
+    private String registeredBy;
+
     @Enumerated(EnumType.STRING)
     private MigrationStatus status; // e.g., "Pending", "Approved"
 }

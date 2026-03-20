@@ -1,5 +1,6 @@
 package com.sample_project.migration_project.service;
 
+import com.sample_project.migration_project.exception.ResourceNotFoundException;
 import com.sample_project.migration_project.model.Migrant;
 import com.sample_project.migration_project.repository.MigrantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,9 @@ import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.GrantedAuthority;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -25,6 +29,15 @@ public class MigrantService {
         if (repository.findByGovernmentId(migrant.getGovernmentId()).isPresent()) {
             throw new RuntimeException("Migrant with this ID already exists!");
         }
+
+        Object principal = org.springframework.security.core.context.SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof org.springframework.security.core.userdetails.UserDetails) {
+            String username = ((org.springframework.security.core.userdetails.UserDetails) principal).getUsername();
+            migrant.setRegisteredBy(username);
+        } else {
+            migrant.setRegisteredBy(principal.toString());
+        }
+
         return repository.save(migrant);
     }
 
@@ -114,7 +127,25 @@ public class MigrantService {
         document.add(table);
         document.close();
     }
+//    public Migrant getMigrantById(Long id) {
+//        return repository.findById(id)
+//                .orElseThrow(() -> new ResourceNotFoundException("Migrant with ID " + id + " not found in the database."));
+//    }
+    public Migrant getMigrantByIdSecure(Long id, String currentUsername, Collection<? extends GrantedAuthority> authorities) {
+        Migrant migrant = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Migrant with ID " + id + " not found."));
 
+        boolean isPrivileged = authorities.stream()
+                .anyMatch(auth -> auth.getAuthority().equals("ROLE_ADMIN") || auth.getAuthority().equals("ROLE_INSTITUTION"));
 
+        if (!isPrivileged) {
+            // Assuming the regular user's username matches their governmentId.
+            // Change .getGovernmentId() to .getRegisteredBy() or another field if they login differently.
+            if (!migrant.getGovernmentId().equals(currentUsername)) {
+                throw new AccessDeniedException("You do not have permission to view this record.");
+            }
+        }
 
+        return migrant;
+    }
 }

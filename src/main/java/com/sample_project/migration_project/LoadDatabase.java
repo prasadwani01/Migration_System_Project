@@ -23,6 +23,7 @@ public class LoadDatabase {
                 m1.setGovernmentId("USADEPT001"); // 10 chars, Uppercase, No Hyphens
                 m1.setOriginState("California");
                 m1.setDestinationState("Texas");
+                m1.setRegisteredBy("System");
                 m1.setMigrationDate(LocalDate.now());
                 m1.setStatus(MigrationStatus.PENDING);
                 repository.save(m1);
@@ -32,6 +33,7 @@ public class LoadDatabase {
                 m2.setGovernmentId("UKHOME0002"); // 10 chars, Uppercase, No Hyphens
                 m2.setOriginState("London");
                 m2.setDestinationState("Manchester");
+                m2.setRegisteredBy("System");
                 m2.setMigrationDate(LocalDate.now().minusDays(5));
                 m2.setStatus(MigrationStatus.APPROVED);
                 repository.save(m2);
