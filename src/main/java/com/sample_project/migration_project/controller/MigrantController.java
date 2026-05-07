@@ -26,7 +26,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/migrants")
-@CrossOrigin(origins = "http://localhost:3000") // Allow React Frontend
+//@CrossOrigin(origins = "http://localhost:3000") // Allow React Frontend
 public class MigrantController {
 
     @Autowired

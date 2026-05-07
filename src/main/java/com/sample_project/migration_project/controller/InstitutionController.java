@@ -1,12 +1,14 @@
 package com.sample_project.migration_project.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/institution")
+//@CrossOrigin(origins = "http://localhost:3000") // Allow React Frontend
 public class InstitutionController {
 
     // 1. A simple test endpoint to verify the Institution token works

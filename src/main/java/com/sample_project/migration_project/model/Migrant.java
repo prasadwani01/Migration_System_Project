@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*; // Import validation rules
 import lombok.Data;
 import java.time.LocalDate;
+import java.time.LocalDateTime; // Added this import for the timestamp
 
 @Entity
 @Data
@@ -44,4 +45,9 @@ public class Migrant {
 
     @Enumerated(EnumType.STRING)
     private MigrationStatus status; // e.g., "Pending", "Approved"
+
+    // --- NEW FIELDS FOR REAL-TIME LOCATION TRACKING ---
+    private Double currentLatitude;
+    private Double currentLongitude;
+    private LocalDateTime lastLocationUpdate;
 }
