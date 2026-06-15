@@ -78,8 +78,11 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         // The exact URLs where the frontend team is running their local servers
-        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173","https://migration-frontend-7erdi2mo0-prasadwani01-8281s-projects.vercel.app/"));
-
+        configuration.setAllowedOriginPatterns(List.of(
+                "http://localhost:3000",
+                "http://localhost:5173",
+                "https://*.vercel.app"  // <-- The wildcard '*' allows ANY Vercel link to connect securely!
+        ));
         // Allow standard HTTP methods
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
