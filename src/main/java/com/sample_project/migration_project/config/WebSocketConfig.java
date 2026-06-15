@@ -24,7 +24,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // This is the main URL the frontend connects to.
         // We add your frontend localhosts here so CORS doesn't block the connection.
         registry.addEndpoint("/ws-location")
-                .setAllowedOrigins("http://localhost:3000", "http://localhost:5173")
+                .setAllowedOrigins("http://localhost:3000", "http://localhost:5173","https://migration-frontend-7erdi2mo0-prasadwani01-8281s-projects.vercel.app")
                 .withSockJS(); // Fallback in case a browser doesn't support modern WebSockets
     }
 }
